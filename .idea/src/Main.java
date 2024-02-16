@@ -18,7 +18,10 @@ public class Main {
             try {
                 Polygon polygon = helper.readPolygon(filepath);
                 System.out.println("The polygon has " + polygon.npoints + " vertices.");
-                if (helper.isConvex(polygon)) {
+                long start = System.nanoTime();
+                boolean notConcave = helper.isConvex(polygon);
+                System.out.println(System.nanoTime() - start);
+                if (notConcave) {
                     System.out.println("The polygon is convex.");
                 } else {
                     System.out.println("The polygon is not convex.");
