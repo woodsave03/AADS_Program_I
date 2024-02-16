@@ -27,9 +27,9 @@ public class PolygonModel {
     }
 
     public boolean isConvex(Polygon polygon) {
-        boolean isConvex = true;
+        boolean prevNegative = false, negative = false;
         int index = 0;
-        while (isConvex && index < polygon.npoints) {
+        while (prevNegative == negative && index < polygon.npoints) {
             int p2 = (index + 1) % polygon.npoints;
             Vector v1 = new Vector(polygon.xpoints[index] - polygon.xpoints[p2],
                     polygon.ypoints[index] - polygon.ypoints[p2]);
@@ -37,12 +37,15 @@ public class PolygonModel {
             Vector v2 = new Vector(polygon.xpoints[p2] - polygon.xpoints[p3],
                     polygon.ypoints[p2] - polygon.ypoints[p3]);
             double crossProduct = v1.x * v2.y - v1.y * v2.x;
-            if (crossProduct < 0) {
-                isConvex = false;
+            if (index == 0) {
+                prevNegative = negative = crossProduct < 0;
+            } else {
+                negative = crossProduct < 0;
             }
             index++;
         }
-        return isConvex;
+        System.out.println("Stopped at index " + index);
+        return prevNegative == negative;
     }
 
     private class Vector {
